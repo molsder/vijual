@@ -1,6 +1,4 @@
 (ns vijual
-  (:use clojure.contrib.math)
-  (:use [clojure.contrib.seq-utils :only (positions)])
   (:import (java.io File)
            (javax.imageio ImageIO)
            (java.awt Color)
@@ -9,6 +7,13 @@
 ;;Maintained By Conrad Barski- Licensed under GPLV3
 
 ;; Common functions to all layout algorithms
+
+;; from clojure.contrib.seq
+(defn positions
+  "Returns a lazy sequence containing the positions at which pred
+   is true for items in coll."
+  [pred coll]
+  (for [[idx elt] (indexed coll) :when (pred elt)] idx))
 
 (defn half [x]
   (/ x 2))
