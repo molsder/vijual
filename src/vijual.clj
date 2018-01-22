@@ -450,8 +450,8 @@
                   (mapcat (fn [{:keys [legs dest arrow]}]
                             (let [shapes (map (fn [{x1 :xpos y1 :ypos dir1 :dir} {x2 :xpos y2 :ypos dir2 :dir}]
                                                 (if (or (horizontal dir1) (vertical dir2))
-                                                  {:type :rect :x (min x1 x2) :y (min y1 y2) :width (+ (Math/abs (- x2 x1)) line-wid) :height line-wid}
-                                                  {:type :rect :x (min x1 x2) :y (min y1 y2) :width line-wid :height (+ (Math/abs (- y2 y1)) line-wid)}))
+                                                  {:type :rect :x (min x1 x2) :y (min y1 y2) :width (+ (Math/abs (int (- x2 x1))) line-wid) :height line-wid}
+                                                  {:type :rect :x (min x1 x2) :y (min y1 y2) :width line-wid :height (+ (Math/abs (int (- y2 y1))) line-wid)}))
                                               legs
                                               (next legs))
                                   first-leg (first legs)
@@ -491,7 +491,7 @@
          (map (fn [[f t]]
                 (let [{fx :x fy :y} (pos f)
                       {tx :x ty :y} (pos t)]
-                  (+ (Math/abs (- fx tx)) (Math/abs (- fy ty)))))
+                  (+ (Math/abs (int (- fx tx))) (Math/abs (int (- fy ty))))))
               edges)))
 
 (defn get-side
@@ -545,7 +545,7 @@
          (map (fn [[f t]]
                 (let [{fx :x fy :y} (pos f)
                       {tx :x ty :y} (pos t)]
-                  (* (+ (Math/abs (- fx tx)) (Math/abs (- fy ty)))
+                  (* (+ (Math/abs (int (- fx tx))) (Math/abs (int (- fy ty))))
                      (cond (> fy ty) 2
                            (= fy ty) 1
                            true 1))))
@@ -898,7 +898,7 @@
                                          {xpos1 :xpos} (legs leg-index)
                                          {xpos2 :xpos} (legs (inc leg-index))
                                          xpos (min xpos1 xpos2)
-                                         width (+ (Math/abs (- xpos2 xpos1)) line-wid)
+                                         width (+ (Math/abs (int (- xpos2 xpos1))) line-wid)
                                          nuy (scan-lowest-y scan xpos width)
                                          f (fn [nodes i]
                                              (assoc-in nodes (concat path [i :ypos]) nuy))]
